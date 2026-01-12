@@ -1,8 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
 
-// We provide empty strings as fallbacks so the 'createClient' function 
-// doesn't throw a "required" error during the build process.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder'
+// Try to get the real keys from the environment
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// If keys are missing (like during build), use placeholders to prevent crashing.
+// If keys exist (like on the live site), use the real ones.
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder'
+)
